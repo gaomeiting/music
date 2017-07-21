@@ -1,6 +1,7 @@
 <template>
   <div class="singer">
-      我是歌手页面
+	<list-view :data="data" @select="selectSinger"></list-view>
+	<router-view></router-view>
   </div>
 </template>
 
@@ -8,23 +9,30 @@
 import { getSingerList } from "api/singer";
 import { ERR_OK } from "api/config";
 import  Singer from"common/js/singer";
+import  ListView from"base/listview/listview";
+import  { mapMutations } from"vuex";
 const HOT_NAME="热门"
 const HOT_NAME_LEN=10
   export default {
   	data() {
   		return {
-  			singers: []
+  			data: []
   		}
   	},
   	created() {
   		this._getSingerList()
   	},
   	methods: {
+  		selectSinger(item) {
+  			this.$router.push({
+  				path: `/singer/${ item.id }`
+  			})
+  			this.setSinger(item)
+  		},
   		_getSingerList() {
   			getSingerList().then(res => {
 				if( res.code === ERR_OK ) {
-					this.singers=this._normalizeSinger(res.data.list)
-					console.log(this.singers)
+					this.data=this._normalizeSinger(res.data.list)
 				}
 				else {
 					console.log(res)
@@ -34,7 +42,7 @@ const HOT_NAME_LEN=10
 			  })
   			
   		},
-  		_normalizeSinger(singers){
+  		_normalizeSinger(data){
   			let result=[];
   			let retArr = [];
   			let hotArr=[];
@@ -44,20 +52,18 @@ const HOT_NAME_LEN=10
   					items: []
   				}
   			}
-  			singers.forEach((singer, index) => {
+  			data.forEach((singer, index) => {
   				if( index<HOT_NAME_LEN) {
   					map.hot.items.push(new Singer({id: singer.Fsinger_mid, name: singer.Fsinger_name} ))
   				}
-  				for(let k in singer) {
-  					let key=singer.Findex;
-  					if(!map[key]) {
-  						map[key]={
-  							title: key,
-  							items: []
-  						}
-  					}
-  					map[key].items.push(new Singer({id: singer.Fsinger_mid, name: singer.Fsinger_name} ))
-  				}
+  				let key=singer.Findex;
+				if(!map[key]) {
+					map[key]={
+						title: key,
+						items: []
+					}
+				}
+				map[key].items.push(new Singer({id: singer.Fsinger_mid, name: singer.Fsinger_name} ))
   			})
   			for(let key in map) {
   				let val=map[key];
@@ -74,8 +80,14 @@ const HOT_NAME_LEN=10
   			})
   			result= hotArr.concat(retArr)
   			return result;
-  		}
+  		},
+  		...mapMutations({
+  			setSinger : 'SET_SINGER'
+  		})
   	
+  	},
+  	components: {
+  		ListView
   	}
 
   }

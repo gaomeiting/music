@@ -23,6 +23,10 @@ props: {
 	refreshDelay: {
 	        type: Number,
 	        default: 20
+	},
+	listenScroll: {
+		type: Boolean,
+		default: false
 	}
 	
 },
@@ -33,10 +37,18 @@ mounted() {
 },
 methods: {
 	_initBScroll() {
+		if( !this.$refs.wrapper ) {
+			return;
+		}
 		this.scroll=new BScroll(this.$refs.wrapper, {
 			click: this.click,
 			probeType: this.probeType
 		})
+		if(this.listenScroll) {
+			this.scroll.on('scroll', (pos) => {
+				this.$emit('scroll', pos)
+			})
+		}
 	},
 	disable() {
 		this.scroll && this.scroll.disable()
@@ -46,6 +58,12 @@ methods: {
 	},
 	refresh() {
 		this.scroll && this.scroll.refresh()
+	},
+	scrollToElement() {
+		this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+	},
+	scrollTo() {
+		this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
 	}
 },
 watch: {
