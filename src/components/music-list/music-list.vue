@@ -5,10 +5,10 @@
  	</div>
  	<h1 class="title">{{title}}</h1>
  	<div class="bg-image" :style="bgStyle" ref="bgImage">
- 		<div class="play-wrapper" v-if="songs.length" ref="playBtn">
+ 		<div class="play-wrapper" v-if="songs.length>0" ref="playBtn">
  			<div class="play">
  				<i class="icon-play iconfont icon-xueshufeng-suijibofang"></i>
- 				<span class="text">随机播放全部</span>
+ 				<span class="text" @click.stop.prevent="randomPlay({songs})">随机播放全部</span>
  			</div>
  		</div>
  		<div class="filter"></div>
@@ -16,7 +16,7 @@
  	<div class="bg-layer" ref="layer"></div>
  	<scroll :data="songs" :listen-scroll="listenScroll" :probe-type="probeType" @scroll="scroll" class="list" ref="list">
  		<div class="song-list-wrapper">
- 			<song-list :songs="songs"></song-list>
+ 			<song-list :songs="songs" @selectSong="selectSong"></song-list>
  		</div>
  	</scroll>
 </div>
@@ -25,6 +25,7 @@
 <script type="text/ecmascript-6">
 import SongList from "base/song-list/song-list";
 import Scroll from "base/scroll/scroll";
+import {mapActions} from "vuex";
 const RESERVED_HEIGHT = 44
 export default {
 props : {
@@ -56,12 +57,23 @@ mounted() {
 	this.$refs.list.$el.style.top= `${this.imageHeight}px`
 },
 methods : {
+	randomPlayy(item) {
+		console.log(item)
+	},
+	selectSong(song, index) {
+		let songs = this.songs;
+		this.selectPlay({songs, index})
+	},
 	back() {
 		this.$router.back()
 	},
 	scroll(pos) {
 		this.scrollY=pos.y
-	}
+	},
+	...mapActions([
+		'selectPlay',
+		'randomPlay'
+	])
 },
 computed: {
 	bgStyle() {
