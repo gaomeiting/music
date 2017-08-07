@@ -145,7 +145,6 @@ export default {
 	watch: {
 		currentSong(newSong, oldSong) {
 			if(newSong.id === oldSong.id) {
-				console.log("单曲循环")
 				return;
 			}
 			if(this.lyric) {
@@ -298,7 +297,6 @@ export default {
 		},
 		getLyric(currentSong) {
 			currentSong.getLyric().then(res=>{
-				console.log(res)
 				this.lyric= new Lyric(res, this.lyricHandler);
 				if(this.playing) {
 					this.lyric.play()
@@ -332,7 +330,7 @@ export default {
 			const touch=e.touches[0]
 			this.deltaX=touch.pageX-this.startX;
 			this.deltaY=touch.pageY-this.startY;
-			if(Math.abs(this.deltaX)<Math.abs(this.deltaY)) return;
+			if(Math.abs(this.deltaX)<=Math.abs(this.deltaY)) return;
 			let initX=this.currentShow=='cd' ? 0 : -window.innerWidth
 			
 			let offsetLeft=initX+this.deltaX

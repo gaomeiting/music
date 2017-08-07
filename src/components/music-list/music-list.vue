@@ -1,5 +1,5 @@
 <template>
-<div class="music-list">
+<div class="music-list" ref="musicList">
  	<div class="back" @click.prevent.stop="back">
  		<i class="icon-back iconfont icon-chevron-thin-left"></i>
  	</div>
@@ -26,8 +26,10 @@
 import SongList from "base/song-list/song-list";
 import Scroll from "base/scroll/scroll";
 import {mapActions} from "vuex";
+import {playlistMixin} from "common/js/mixin";
 const RESERVED_HEIGHT = 44
 export default {
+mixins: [playlistMixin],
 props : {
 	title: {
 		type: String,
@@ -56,6 +58,7 @@ mounted() {
 	this.imageHeight=this.$refs.bgImage.offsetHeight;
 	this.$refs.list.$el.style.top= `${this.imageHeight}px`
 },
+
 methods : {
 	randomPlayy(item) {
 		console.log(item)
@@ -69,6 +72,11 @@ methods : {
 	},
 	scroll(pos) {
 		this.scrollY=pos.y
+	},
+	handlePlayList(playList) {
+		const bot=playList.length > 1 ? '60px' : 0;
+		this.$refs.list.$el.style.bottom=bot;
+		this.$refs.list.refresh()
 	},
 	...mapActions([
 		'selectPlay',
