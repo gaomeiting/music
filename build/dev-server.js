@@ -37,6 +37,23 @@ apiRoutes.get('/getDiscList', (req,res) => {
     console.log(err)
   })
 })
+apiRoutes.get('/lyric', (req,res) => {
+  axios.get('https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg',{
+    headers: {
+      referer: 'http://y.qq.com',
+      host: 'y.qq.com'
+    },
+    params: req.query
+  }).then((response) => {
+    let ret=response.data
+    if(typeof(ret)=="string") {
+      let matches= ret.match(/^\w+\(({[^()]+})\)$/)
+       res.json(JSON.parse(matches[1]))
+    }
+  }).catch((err) => {
+    console.log(err)
+  })
+})
 app.use('/api', apiRoutes)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {

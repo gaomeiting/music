@@ -29,6 +29,6 @@ export function getDiscList() {
 	}).then((res)=> {
 		return Promise.resolve(res.data)
 	}).catch(err => {
-		console.log(err)
+		return Promise.reject(res.data)
 	});
 }
