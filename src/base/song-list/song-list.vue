@@ -22,7 +22,7 @@ export default {
 	},
 	methods: {
 		songDesc(song) {
-			return `${song.name}-${song.album}`
+			return `${song.singer}-${song.album}`
 		},
 		select(song, index) {
 			this.$emit('selectSong', song, index)

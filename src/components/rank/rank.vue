@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rank">
       我是排行页面
   </div>
 </template>

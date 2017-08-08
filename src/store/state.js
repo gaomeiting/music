@@ -6,6 +6,7 @@ const state= {
 	currentIndex: 0,
 	playing: false,
 	mode: playMode.sequence,
-	fullScreen: false
+	fullScreen: false,
+	disc: {}
 }
 export default state;

@@ -21,6 +21,9 @@ const mutations = {
 	},
 	[types.SET_PLAYING](state, flag) {
 		state.playing=flag;
+	},
+	[types.SET_DISC](state, disc) {
+		state.disc=disc;
 	}
 }
 export default mutations

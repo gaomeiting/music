@@ -8,3 +8,4 @@ export const currentSong = state => {
 export const mode = state => state.mode;
 export const playing = state => state.playing;
 export const fullScreen = state => state.fullScreen;
+export const disc = state => state.disc;
