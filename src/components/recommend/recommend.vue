@@ -65,8 +65,8 @@ import { playlistMixin } from "common/js/mixin";
 			this.setDisc(item);
 		},
 		handlePlayList(playList) {
-			const bot=playList.length > 1 ? '60px' : 0;
-			this.$refs.scroll.$el.style.bottom=bot;
+			const bot=playList.length  ? '60px' : 0;
+			this.$refs.recommend.style.bottom=bot;
 			this.$refs.scroll.refresh()
 		},
 		_getRecommend() {

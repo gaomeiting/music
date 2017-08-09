@@ -32,7 +32,7 @@ const HOT_NAME_LEN=10
   			this.setSinger(item)
   		},
 	             handlePlayList(playList) {
-			const bot=playList.length > 1 ? '60px' : 0;
+			const bot=playList.length ? '60px' : 0;
 			this.$refs.singer.style.bottom=bot;
 			this.$refs.list.refresh()
 	             },

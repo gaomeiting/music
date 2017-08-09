@@ -22,6 +22,9 @@ export default {
 	},
 	methods: {
 		_getDiscDetail() {
+			if(!this.disc.dissid) {
+				this.$router.push('/recommend')
+			}
 			getDiscDetail(this.disc.dissid).then(res => {
 				if(res.code=== ERR_OK) {
 					this.data=this._normalizeData(res.cdlist[0].songlist)

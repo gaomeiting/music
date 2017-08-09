@@ -18,6 +18,9 @@
  		<div class="song-list-wrapper">
  			<song-list :songs="songs" @selectSong="selectSong"></song-list>
  		</div>
+ 		<div v-show="!songs.length" class="loading-container">
+		        <loading></loading>
+		</div>
  	</scroll>
 </div>
 </template>
@@ -25,6 +28,7 @@
 <script type="text/ecmascript-6">
 import SongList from "base/song-list/song-list";
 import Scroll from "base/scroll/scroll";
+import Loading from "base/loading/loading";
 import {mapActions} from "vuex";
 import {playlistMixin} from "common/js/mixin";
 const RESERVED_HEIGHT = 44
@@ -74,7 +78,7 @@ methods : {
 		this.scrollY=pos.y
 	},
 	handlePlayList(playList) {
-		const bot=playList.length > 1 ? '60px' : 0;
+		const bot=playList.length  ? '60px' : 0;
 		this.$refs.list.$el.style.bottom=bot;
 		this.$refs.list.refresh()
 	},
@@ -124,7 +128,8 @@ watch: {
 },
 components: {
 	SongList,
-	Scroll
+	Scroll,
+	Loading
 }
 }
 </script>
