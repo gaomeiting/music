@@ -7,6 +7,7 @@ const state= {
 	playing: false,
 	mode: playMode.sequence,
 	fullScreen: false,
-	disc: {}
+	disc: {},
+	rank: {}
 }
 export default state;

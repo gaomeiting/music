@@ -2,6 +2,9 @@
 <div class="song-list">
 	<ul>
 		<li class="item" v-for="(song, index) in songs" @click.stop.prevent="select(song, index)">
+			<div class="rank" v-show="topList">
+			          <span :class="index > 2 ? 'text' : `icon icon${index}`">{{ topListTxt(index) }}</span>
+			</div>
 			<div class="content">
 				<h3 class="name">{{song.name}}</h3>
 				<p class="desc">{{songDesc(song)}}</p>
@@ -18,6 +21,10 @@ export default {
 		songs: {
 			type: Array,
 			default: []
+		},
+		topList: {
+			type: Boolean,
+			default: false
 		}
 	},
 	methods: {
@@ -26,6 +33,11 @@ export default {
 		},
 		select(song, index) {
 			this.$emit('selectSong', song, index)
+		},
+		topListTxt(index) {
+			if(index>2) {
+				return index+1
+			}
 		}
 	}
 }
