@@ -75,7 +75,7 @@ input[type="submit"] {
 }
 button[disabled],html input[disabled] {  cursor: default;}
 button::-moz-focus-inner,input::-moz-focus-inner {  border: 0;  padding: 0;}
-input {  line-height: normal;}
+input {  line-height: normal; width: 100%; background-color: transparent; text-indent: 0.8em;}
 input[type="checkbox"],
 input[type="radio"] {
   box-sizing: border-box; /* 1 */
