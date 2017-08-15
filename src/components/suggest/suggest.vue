@@ -10,10 +10,10 @@
 			</div>
 		</li>
 		<loading v-if="hasMore"></loading>
-		<!-- <div class="no-result-wrapper">
-			
-		</div> -->
 	</ul>
+	<div class="no-result-wrapper" v-if="!hasMore && !searchResult.length">
+		<no-result></no-result>
+	</div>
 </scroll>
 </template>
 
@@ -23,6 +23,7 @@ import { ERR_OK } from "api/config";
 import { CreateSong } from "common/js/song";
 import Scroll from "base/scroll/scroll";
 import Loading from "base/loading/loading";
+import NoResult from "base/no-result/no-result";
 const TYPE_SINGER='singer'
 export default {
 props: {
@@ -119,7 +120,8 @@ methods: {
 },
 components: {
 	Scroll,
-	Loading
+	Loading,
+	NoResult
 }
 }
 </script>

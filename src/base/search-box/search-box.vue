@@ -7,7 +7,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-
+import { debounce } from "common/js/until";
 export default {
 	props: {
 		placeholder: {
@@ -21,9 +21,9 @@ export default {
 		}
 	},
 	created() {
-		this.$watch('query', (newVal, oldVal) =>{
+		this.$watch('query', debounce((newVal) =>{
 			this.$emit('query', newVal)
-		})
+		},200))
 	},
 	methods: {
 		clear() {
