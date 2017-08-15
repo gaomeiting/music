@@ -27,6 +27,10 @@ props: {
 	listenScroll: {
 		type: Boolean,
 		default: false
+	},
+	pullUp: {
+		type: Boolean,
+		default: false
 	}
 	
 },
@@ -49,6 +53,15 @@ methods: {
 				this.$emit('scroll', pos)
 			})
 		}
+		if(this.pullUp) {
+			this.scroll.on('scrollEnd', () => {
+				let scroll=this.scroll
+				if(scroll.y <= scroll.maxScrollY+60) {
+					this.$emit('scrollEnd')
+				}
+			})
+			
+		}
 	},
 	disable() {
 		this.scroll && this.scroll.disable()
@@ -69,6 +82,7 @@ methods: {
 watch: {
 	data() {
 		this.$nextTick(() => {
+			console.log(1234)
 			this.refresh();
 		})
 	}

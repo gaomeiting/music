@@ -1,5 +1,5 @@
 <template>
-<div class="suggest">
+<scroll :data="searchResult" :pullUp="pullUp" @scrollEnd="searchMore(query,page,zhida)" class="suggest" ref="suggest">
 	<ul class="suggest-list">
 		<li class="suggest-item" v-for="item in searchResult">
 			<div class="icon">
@@ -9,14 +9,20 @@
 			  	<p class="text" v-html="getDisplayName(item)"></p>
 			</div>
 		</li>
+		<loading v-if="hasMore"></loading>
+		<!-- <div class="no-result-wrapper">
+			
+		</div> -->
 	</ul>
-</div>
+</scroll>
 </template>
 
 <script type="text/ecmascript-6">
 import { searchFor } from "api/search";
 import { ERR_OK } from "api/config";
 import { CreateSong } from "common/js/song";
+import Scroll from "base/scroll/scroll";
+import Loading from "base/loading/loading";
 const TYPE_SINGER='singer'
 export default {
 props: {
@@ -24,19 +30,23 @@ props: {
 		type: String,
 		default: ''
 	},
-	page: {
+	zhida: {
 		type: Number,
 		default: 1
 	}
 },
 data() {
 	return {
-		searchResult: []
+		searchResult: [],
+		page: 1,
+		pullUp: true,
+		hasMore: true
 	}
 },
 watch: {
 	query(newVal, oldVal) {
-		this._searchFor(newVal, this.page)
+		this.page=1;
+		this._searchFor(newVal, this.page, this.zhida)
 	}
 },
 methods: {
@@ -48,10 +58,38 @@ methods: {
 		}
 		
 	},
-	_searchFor(query,page) {
-		searchFor(query, page).then(res => {
+	searchMore(query,page,zhida) {
+		if(!this.hasMore) {
+			return;
+		}
+		searchFor(query, page, zhida).then(res => {
+			if(res.code===ERR_OK) {
+				let list=res.data.song.list
+				this.searchResult=this.searchResult.concat(this._normalizeList(list))
+				this._checkHasMore(res.data)
+			}else{
+				console.log(res.code)
+			}
+		}).catch(err => {
+			console.log(err)
+		})
+	},
+	_checkHasMore(data) {
+		let song=data.song
+		if(song.curnum+song.curpage * 20 >= song.totalnum) {
+			this.hasMore=false;
+		}
+		else {
+			this.page++;
+		}
+	},
+	_searchFor(query,page,zhida) {
+		this.hasMore=true;
+		this.$refs.suggest.scrollTo(0,0,0)
+		searchFor(query, page, zhida).then(res => {
 			if(res.code===ERR_OK) {
 				this.searchResult=this._getResult(res.data)
+				this._checkHasMore(res.data)
 			}else{
 				console.log(res.code)
 			}
@@ -78,6 +116,10 @@ methods: {
 		})
 		return ret
 	}
+},
+components: {
+	Scroll,
+	Loading
 }
 }
 </script>

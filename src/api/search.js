@@ -12,7 +12,7 @@ export function getHotKey() {
 	})
 	return jsonp( url, data, options )
 }
-export function searchFor(w, p) {
+export function searchFor(w, p, zhida) {
 	const url='https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
 	const data=Object.assign({},commonParams, {
 		w,
@@ -22,7 +22,7 @@ export function searchFor(w, p) {
 		platform: 'h5',
 		needNewCode: 1,
 		zhidaqu: 1,
-		catZhida: 1,
+		catZhida: zhida ? 1 : 0,
 		t: 0,
 		flag: 1,
 		ie: 'utf-8',
