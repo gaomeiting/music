@@ -2,7 +2,7 @@ import { commonParams } from "api/config";
 import axios from "axios";
 export function getLyric(mid) {
 	let url = "api/lyric"
-	let data = Object.assign(commonParams, {
+	let data = Object.assign({}, commonParams, {
 		pcachetime : +new Date(),
 		songmid :  mid,
 		loginUin : 0,

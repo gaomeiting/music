@@ -144,6 +144,7 @@ export default {
 	},
 	watch: {
 		currentSong(newSong, oldSong) {
+
 			if(newSong.id === oldSong.id) {
 				return;
 			}
@@ -170,6 +171,9 @@ export default {
 		},
 		open() {
 			this.setFullScreen(true)
+			/*if(!this.playing && this.lyric ) {
+				this.lyric.stop()
+			}*/
 		},
 		enter(el, done) {
 			const { x, y, scale }=this._getPosAndScale();
@@ -210,7 +214,12 @@ export default {
 		},
 		togglePlaying() {
 			this.setPlaying(!this.playing);
+			if(this.lyric) {
+				this.lyric.togglePlay()
+			}
+
 		},
+		
 		prev() {
 			if(!this.songReady) return;
 			let index = this.currentIndex-1;
@@ -245,8 +254,7 @@ export default {
 			this.percent= currentTime / totalTime ;
 		},
 		end() {
-
-			if(this.mode==playMode.loop) {
+			if(this.mode==playMode.loop || this.playList.length===1) {
 				this._loop()
 				return;
 			}
@@ -301,6 +309,7 @@ export default {
 				if(this.playing) {
 					this.lyric.play()
 				}
+				
 			}).catch(err => {
 				this.lyric=null;
 				this.currentShow='cd'
@@ -350,7 +359,6 @@ export default {
 					this.$refs.lyricList.$el.style[transform]=`translate3d(${-window.innerWidth}px,0,0)`;
 					this.$refs.middleL.style.opacity=0
 					this.currentShow='lyric'
-					console.log(this.currentShow)
 				}
 			}
 			else {
@@ -361,6 +369,7 @@ export default {
 				}
 			}
 			this.$refs.lyricList.$el.style[transitionDuration]='0.3s'
+
 		},
 		_togglePlayList(list) {
 			let index=list.findIndex((item) => {

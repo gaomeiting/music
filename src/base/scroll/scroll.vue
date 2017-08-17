@@ -31,6 +31,10 @@ props: {
 	pullUp: {
 		type: Boolean,
 		default: false
+	},
+	beforeScroll: {
+		type: Boolean,
+		default: false
 	}
 	
 },
@@ -62,6 +66,13 @@ methods: {
 			})
 			
 		}
+		
+		if(this.beforeScroll) {
+			let scroll=this.scroll;
+			scroll.on('beforeScrollStart', () => {
+				this.$emit('beforeScrollStart')
+			})
+		}
 	},
 	disable() {
 		this.scroll && this.scroll.disable()
@@ -82,7 +93,6 @@ methods: {
 watch: {
 	data() {
 		this.$nextTick(() => {
-			console.log(1234)
 			this.refresh();
 		})
 	}

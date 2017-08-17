@@ -16,7 +16,7 @@
 		</div>
 	</div>
 	<div class="search-result" v-show="query">
-		<suggest :query="query"></suggest>
+		<suggest :query="query" @beforeScrollStart='beforeScrollStart'></suggest>
 	</div>
 </div>
 </template>
@@ -26,7 +26,9 @@ import SearchBox from "base/search-box/search-box";
 import Suggest from "components/suggest/suggest";
 import { getHotKey } from "api/search";
 import { ERR_OK } from "api/config";
+import { playlistMixin } from "common/js/mixin";
 export default {
+	mixins : [playlistMixin],
 	data() {
 		return {
 			query: '',
@@ -52,6 +54,12 @@ export default {
 		},
 		setQuery(item) {
 			this.$refs.searchBox.setQuery(item)
+		},
+		beforeScrollStart() {
+			this.$refs.searchBox.blur()
+		}, 
+		handlePlayList(playList) {
+
 		}
 	},
 	components: {

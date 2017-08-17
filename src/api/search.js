@@ -21,7 +21,7 @@ export function searchFor(w, p, zhida) {
 		notice: 0,
 		platform: 'h5',
 		needNewCode: 1,
-		zhidaqu: 1,
+		zhidaqu: zhida ? 1 : 0,
 		catZhida: zhida ? 1 : 0,
 		t: 0,
 		flag: 1,
@@ -30,8 +30,7 @@ export function searchFor(w, p, zhida) {
 		aggr: 0,
 		perpage: 20,
 		n: 20,
-		remoteplace: 'txt.mqq.all',
+		remoteplace: 'txt.mqq.all'
 	})
 	return jsonp(url, data, options)
 }
-
