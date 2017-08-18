@@ -26,10 +26,8 @@ import Loading from "base/loading/loading";
 import NoResult from "base/no-result/no-result";
 import Singer from "common/js/singer";
 import { mapMutations, mapActions } from "vuex";
-import { playlistMixin } from "common/js/mixin";
 const TYPE_SINGER='singer'
 export default {
-mixins : [playlistMixin],
 props: {
 	query: {
 		type: String,
@@ -92,11 +90,7 @@ methods: {
 		else {
 			this.insertPlay(item)
 		}
-	},
-	handlePlayList(playList) {
-		let bot=playList ? "60px" : 0;
-		this.$refs.suggest.$el.style.bottom=bot;
-		this.$refs.suggest.refresh()	
+		this.$emit('selectItem')
 	},
 	_checkHasMore(data) {
 		let song=data.song

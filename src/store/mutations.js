@@ -1,4 +1,5 @@
 import * as types from "./mutation-types";
+import { savedSearch } from "common/js/catch";
 
 const mutations = {
 	[types.SET_SINGER](state, singer) {
@@ -27,6 +28,9 @@ const mutations = {
 	},
 	[types.SET_RANK](state, rank) {
 		state.rank=rank
+	},
+	[types.SET_SEARCH_HISTORY](state, history) {
+		state.searchHistory=history;
 	}
 }
 export default mutations
