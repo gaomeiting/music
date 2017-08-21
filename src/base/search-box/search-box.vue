@@ -22,7 +22,7 @@ export default {
 	},
 	created() {
 		this.$watch('query', debounce((newVal) =>{
-			this.$emit('query', newVal)
+			this.$emit('queryChange', newVal)
 		},200))
 	},
 	methods: {

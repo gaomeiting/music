@@ -1,5 +1,5 @@
 <template>
- <div class="player" v-show="playList.length > 0">
+ <div class="player" v-show="playList.length > 0" @click.stop="hideList">
  <transition name="normal" @enter="enter" @after-enter="afterEnter" @leave="leave" @after-leave="afterLeave">
  	<div class="normal-player" v-show="fullScreen">
  		<div class="background">
@@ -80,11 +80,12 @@
 		          		<i class="iconfont icon-mini" :class="playIcon"></i>
 		          	</progress-circle>
 		</div>
-		<div class="control">
+		<div class="control" @click.stop="showList">
 		          <i class="iconfont icon-liebiao icon-playlist"></i>
 		</div>
  	</div>
  </transition>
+ <play-list ref="playList" :playList="playList" @currentSongChange="currentSongChange"></play-list>
  <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
  </div>
 </template>
@@ -93,16 +94,17 @@
 import { mapGetters, mapMutations } from "vuex";
 import {prefixStyle} from 'common/js/dom';
 import {playMode} from 'common/js/config';
-import {shuffle} from 'common/js/until';
 import Scroll from 'base/scroll/scroll';
+import PlayList from "components/play-list/play-list";
 import ProgressBar from 'base/progress-bar/progress-bar';
 import ProgressCircle from 'base/progress-circle/progress-circle';
 import animations from 'create-keyframe-animation';
 import Lyric from 'lyric-parser';
+import { playerMixin } from "common/js/mixin";
 const transform = prefixStyle('transform')
 const transitionDuration = prefixStyle('transitionDuration')
 export default {
-	
+	mixins: [playerMixin],
 	data() {
 		return {
 			songReady: false,
@@ -128,23 +130,19 @@ export default {
 		playIcon() {
 			return this.playing ? 'icon-zanting' : 'icon-bofang'
 		},
-		changIcon() {
-			
-			return this.mode == playMode.sequence ? 'icon-loop' : this.mode == playMode.loop ? 'icon-ttpodicon' : 'icon-xueshufeng-suijibofang'
-		},
+		
 		...mapGetters([
 			'fullScreen',
 			'playList',
-			'sequenceList',
-			'currentSong',
 			'currentIndex',
-			'playing',
-			'mode'
+			'playing'
 		])
 	},
 	watch: {
 		currentSong(newSong, oldSong) {
-
+			if(!newSong.id) {
+				return;
+			}
 			if(newSong.id === oldSong.id) {
 				return;
 			}
@@ -290,19 +288,7 @@ export default {
 			}
 			
 		},
-		toggleMode(){
-			let n=(this.mode+1) % 3;
-			let list=[];
-			this.setMode(n);
-			if(this.mode == playMode.random) {
-				list=shuffle(this.sequenceList)
-			}
-			else {
-				list=this.sequenceList
-				
-			}
-			this._togglePlayList(list)
-		},
+		
 		getLyric(currentSong) {
 			currentSong.getLyric().then(res=>{
 				this.lyric= new Lyric(res, this.lyricHandler);
@@ -330,12 +316,15 @@ export default {
 		middleTouchStart(e) {
 
 			const touch=e.touches[0]
-			this.initiated=false;
+			this.initiated=true;
+			this.touch={}
 			this.startX=touch.pageX;
 			this.startY=touch.pageY;
 		},
 		middleTouchMove(e) {
-
+			if(!this.initiated) {
+				return
+			}
 			const touch=e.touches[0]
 			this.deltaX=touch.pageX-this.startX;
 			this.deltaY=touch.pageY-this.startY;
@@ -351,9 +340,7 @@ export default {
 
 		},
 		middleTouchEnd() {
-			this.initiated=true;
-
-			
+			this.initiated=false;
 			if(this.currentShow=='cd') {
 				if(this.touch.percent>0.1) {
 					this.$refs.lyricList.$el.style[transform]=`translate3d(${-window.innerWidth}px,0,0)`;
@@ -371,13 +358,21 @@ export default {
 			this.$refs.lyricList.$el.style[transitionDuration]='0.3s'
 
 		},
-		_togglePlayList(list) {
-			let index=list.findIndex((item) => {
-				return this.currentSong.id==item.id
-			})
-			this.setPlayList(list);
-			this.setCurrentIndex(index);
+		showList() {
+			this.$refs.playList.show()
 		},
+		hideList() {
+			this.$refs.playList.hide()
+		},
+		currentSongChange(item) {
+			let index=this.playList.findIndex((song) => {
+				return song.id===item.id
+			})
+			this.setCurrentIndex(index);
+			this.open();
+			this.$refs.playList.hide()
+		},
+		
 		_loop() {
 			this.$refs.audio.currentTime=0;
 			if(this.lyric) {
@@ -413,16 +408,15 @@ export default {
 		},
 		...mapMutations({
 			setFullScreen: 'SET_FULLSCREEN',
-			setPlaying: 'SET_PLAYING',
-			setCurrentIndex: 'SET_CURRENT_INDEX',
-			setPlayList: 'SET_PLAY_LIST',
-			setMode: 'SET_MODE'
+			setPlaying: 'SET_PLAYING'
+			
 		})
 	},
 	components: {
 		ProgressBar,
 		ProgressCircle,
-		Scroll
+		Scroll,
+		PlayList
 	}
 	
 }

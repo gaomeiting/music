@@ -1,7 +1,7 @@
 <template>
 <div class="search">
 	<div class="search-box-wrapper">
-		<search-box @query="onQueryChange" ref="searchBox"></search-box>
+		<search-box @queryChange="onQueryChange" ref="searchBox"></search-box>
 	</div>
 	<div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
 		<scroll ref="shortcut" class="shortcut" :data="shortcut">
@@ -66,6 +66,7 @@ export default {
 	methods: {
 		onQueryChange(query){
 			this.query=query
+			this.setQuery(query)
 		},
 		
 		setQuery(item) {

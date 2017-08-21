@@ -62,6 +62,32 @@ export const randomPlay = function( {commit, state}, {songs}) {
 	commit(types.SET_SEQUENCE_LIST, songs);
 	commit(types.SET_MODE, playMode.random);
 }
+export const deleteOneSong=function({commit, state}, song) {
+	let playList=state.playList.slice()
+	let sequenceList=state.sequenceList.slice()
+	let pCurrentIndex=state.currentIndex
+	let currentSong=playList[pCurrentIndex]
+	let sCurrentIndex=find(sequenceList, currentSong)
+	let pIndex=find(playList, song)
+	let sIndex=find(sequenceList, song)
+	if(pIndex<pCurrentIndex) {
+		pCurrentIndex=pCurrentIndex ? pCurrentIndex-1 : 0
+	}
+	if(sIndex<sCurrentIndex) {
+		sCurrentIndex=sCurrentIndex ? sCurrentIndex-1 : 0
+	}
+	playList.splice(pIndex, 1)
+	sequenceList.splice(sIndex, 1)
+	commit(types.SET_PLAY_LIST, playList)
+	commit(types.SET_SEQUENCE_LIST, sequenceList)
+	commit(types.SET_CURRENT_INDEX, pCurrentIndex)
+}
+export const deleteAllSongs= function({commit}) {
+	commit(types.SET_PLAY_LIST, [])
+	commit(types.SET_SEQUENCE_LIST, [])
+	/*commit(types.SET_FULLSCREEN, false);*/
+	commit(types.SET_PLAYING, false);
+}
 export const savedSearchHistory= function({commit, state}, query) {
 	commit(types.SET_SEARCH_HISTORY, savedSearch(query))
 }

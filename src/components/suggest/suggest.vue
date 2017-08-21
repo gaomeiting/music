@@ -92,6 +92,9 @@ methods: {
 		}
 		this.$emit('selectItem')
 	},
+	refresh() {
+		this.$refs.suggest.refresh();
+	},
 	_checkHasMore(data) {
 		let song=data.song
 		if(song.curnum+song.curpage * 20 >= song.totalnum) {
@@ -105,7 +108,7 @@ methods: {
 		this.page=1;
 		this.hasMore=true;
 		this.$refs.suggest.scrollTo(0,0,0)
-		console.log(query, this.page, zhida)
+		//console.log(this.query, this.page, zhida)
 		searchFor(query, this.page, zhida).then(res => {
 			if(res.code===ERR_OK) {
 				this.searchResult=this._getResult(res.data)
