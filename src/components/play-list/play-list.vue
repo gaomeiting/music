@@ -74,12 +74,16 @@ methods: {
 		this.$refs.listContent.refresh()
 	},
 	scrollToElement() {
-		let index=this.playList.findIndex((item) => {
+		let list=this.mode===playMode.random ? this.sequenceList : this.playList
+		let index=list.findIndex((item) => {
 			return item.id==this.currentSong.id
 		})
-		this.$refs.listContent.scrollToElement(this.$refs.songItem[index],0)
-		console.log(this.currentSong.name)
-		console.log(this.$refs.songItem[index])
+		this.$nextTick(()=> {
+			this.$refs.listContent.scrollToElement(this.$refs.songItem[index],0)
+			console.log(this.currentSong.name, index)
+			console.log(this.$refs.songItem[index])
+		})
+		
 	},
 	deleteSong(item) {
 		if(this.playList.length==1) {
@@ -97,7 +101,6 @@ methods: {
 	toggleModeChange() {
 		this.toggleMode();
 		this.scrollToElement();
-		//this.$refs.listContent.refresh()
 	},
 	...mapActions([
 		'deleteOneSong',
