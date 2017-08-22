@@ -29,6 +29,7 @@
 	<div class="search-result" v-show="query" ref="searchResult">
 		<suggest ref="suggest" :query="query" @beforeScrollStart='beforeScrollStart' @selectItem="fadeOutSearch"></suggest>
 	</div>
+	<confirm ref="confirmSearch" text="是否清空搜索历史" confirmBtnText="清空"></confirm>
 </div>
 </template>
 
@@ -37,6 +38,7 @@ import SearchBox from "base/search-box/search-box";
 import Suggest from "components/suggest/suggest";
 import SearchList from "base/search-list/search-list";
 import Scroll from "base/scroll/scroll";
+import Confirm from "base/confirm/confirm";
 import { getHotKey } from "api/search";
 import { ERR_OK } from "api/config";
 import { playlistMixin } from "common/js/mixin";
@@ -76,7 +78,11 @@ export default {
 			this.$refs.searchBox.blur()
 		}, 
 		clear() {
-			this.deleteAllSearchHistory()
+		this.$refs.confirmSearch.show()
+		},
+		confirmClear() {
+			this.deleteAllSearchHistory();
+			this.hide();
 		},
 		fadeOutSearch() {
 			this.savedSearchHistory(this.query)
@@ -107,7 +113,8 @@ export default {
 		SearchBox,
 		Suggest,
 		SearchList,
-		Scroll
+		Scroll,
+		Confirm
 	}
 }
 </script>

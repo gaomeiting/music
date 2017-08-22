@@ -11,9 +11,9 @@
 		</div>
 		<scroll :data="playList" ref="listContent" class="list-content">
 			<transition-group ref="list" name="list" tag="ul">
-				<li class="item" :key="item.id" v-for="(item, index) in playList" ref="songItem">
+				<li class="item" :key="item.id" v-for="(item, index) in playList" ref="songItem" @click.stop="currentSongChange(item)">
 					  <i class="iconfont current" :class="{ 'icon-bofang' : currentSong.id===item.id }"></i>
-					  <span class="text" @click.stop="currentSongChange(item)">{{item.name}}</span>
+					  <span class="text">{{item.name}}</span>
 					  <span class="like">
 						<i class="iconfont icon-xiai"></i>
 					  </span>
@@ -33,12 +33,14 @@
 			<span>关闭</span>
 		</div>
 	</div>
+	<confirm ref="confirm" text="是否清空播放列表" confirmBtnText="清空" @confirm="confirmClear"></confirm>
 </div>
 </transition>
 </template>
 
 <script type="text/ecmascript-6">
 import Scroll from "base/scroll/scroll";
+import Confirm from "base/confirm/confirm";
 import { mapGetters, mapActions } from "vuex";
 import { playerMixin } from "common/js/mixin";
 import {playMode} from 'common/js/config';
@@ -80,8 +82,8 @@ methods: {
 		})
 		this.$nextTick(()=> {
 			this.$refs.listContent.scrollToElement(this.$refs.songItem[index],0)
-			console.log(this.currentSong.name, index)
-			console.log(this.$refs.songItem[index])
+			//console.log(this.currentSong.name, index)
+			//console.log(this.$refs.songItem[index])
 		})
 		
 	},
@@ -92,6 +94,9 @@ methods: {
 		this.deleteOneSong(item)
 	},
 	clear() {
+		this.$refs.confirm.show()
+	},
+	confirmClear() {
 		this.deleteAllSongs();
 		this.hide();
 	},
@@ -108,7 +113,8 @@ methods: {
 	])
 },
 components: {
-	Scroll
+	Scroll,
+	Confirm
 }
 }
 </script>
