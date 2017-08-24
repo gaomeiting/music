@@ -91,7 +91,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import {prefixStyle} from 'common/js/dom';
 import {playMode} from 'common/js/config';
 import Scroll from 'base/scroll/scroll';
@@ -154,7 +154,9 @@ export default {
 				audio.play()
 				this.setPlaying(true)
 				this.getLyric(newSong)
+				this.savedPlayHistory(newSong)
 			})
+			
 		},
 		playing(newPlaying) {
 			this.$nextTick(()=> {
@@ -169,9 +171,6 @@ export default {
 		},
 		open() {
 			this.setFullScreen(true)
-			/*if(!this.playing && this.lyric ) {
-				this.lyric.stop()
-			}*/
 		},
 		enter(el, done) {
 			const { x, y, scale }=this._getPosAndScale();
@@ -217,7 +216,6 @@ export default {
 			}
 
 		},
-		
 		prev() {
 			if(!this.songReady) return;
 			let index = this.currentIndex-1;
@@ -288,7 +286,6 @@ export default {
 			}
 			
 		},
-		
 		getLyric(currentSong) {
 			currentSong.getLyric().then(res=>{
 				this.lyric= new Lyric(res, this.lyricHandler);
@@ -410,7 +407,10 @@ export default {
 			setFullScreen: 'SET_FULLSCREEN',
 			setPlaying: 'SET_PLAYING'
 			
-		})
+		}),
+		...mapActions([
+			'savedPlayHistory'
+		])
 	},
 	components: {
 		ProgressBar,

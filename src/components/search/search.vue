@@ -3,7 +3,7 @@
 	<div class="search-box-wrapper">
 		<search-box @queryChange="onQueryChange" ref="searchBox"></search-box>
 	</div>
-	<div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
+	<div ref="shortcutWrapper" class="shortcut-wrapper" v-if="!query">
 		<scroll ref="shortcut" class="shortcut" :data="shortcut">
 			<div>
 				<div class="hot-key" v-show="hotkey.length">
@@ -26,7 +26,7 @@
 			</div>
 		</scroll>
 	</div>
-	<div class="search-result" v-show="query" ref="searchResult">
+	<div class="search-result" v-else ref="searchResult">
 		<suggest ref="suggest" :query="query" @beforeScrollStart='beforeScrollStart' @selectItem="fadeOutSearch"></suggest>
 	</div>
 	<confirm ref="confirmSearch" text="是否清空搜索历史" confirmBtnText="清空"></confirm>
@@ -41,14 +41,13 @@ import Scroll from "base/scroll/scroll";
 import Confirm from "base/confirm/confirm";
 import { getHotKey } from "api/search";
 import { ERR_OK } from "api/config";
-import { playlistMixin } from "common/js/mixin";
+import { playlistMixin, searchMixin } from "common/js/mixin";
 import { mapGetters, mapActions } from "vuex";
 import { deleteOneSearch } from "common/js/catch";
 export default {
-	mixins : [playlistMixin],
+	mixins : [playlistMixin, searchMixin],
 	data() {
 		return {
-			query: '',
 			page: 1,
 			hotkey: []
 		}
@@ -57,26 +56,13 @@ export default {
 		this._getHotKey()
 	},
 	computed: {
-		shortcut() {
+		shortcut() { 
 			return this.hotkey.concat(this.searchHistory)
-			
-		},
-		...mapGetters([
-			'searchHistory'
-		])
+		}
+		
 	},
 	methods: {
-		onQueryChange(query){
-			this.query=query
-			this.setQuery(query)
-		},
 		
-		setQuery(item) {
-			this.$refs.searchBox.setQuery(item)
-		},
-		beforeScrollStart() {
-			this.$refs.searchBox.blur()
-		}, 
 		clear() {
 		this.$refs.confirmSearch.show()
 		},
@@ -84,15 +70,19 @@ export default {
 			this.deleteAllSearchHistory();
 			this.hide();
 		},
-		fadeOutSearch() {
-			this.savedSearchHistory(this.query)
-		},
 		handlePlayList(playList) {
+
 			let bot=playList.length ? '60px' : 0;
-			this.$refs.shortcutWrapper.style.bottom=bot;
-			this.$refs.shortcut.refresh();
-			this.$refs.searchResult.style.bottom=bot;
-			this.$refs.suggest.refresh()
+			let shortcutWrapper=this.$refs.shortcutWrapper
+			let searchResult=this.$refs.searchResult
+			if(shortcutWrapper) {
+				shortcutWrapper.style.bottom=bot;
+				this.$refs.shortcut.refresh();
+			}
+			if(searchResult) {
+				searchResult.style.bottom=bot;
+				this.$refs.suggest.refresh()
+			}
 		},
 		_getHotKey() {
 			getHotKey().then(res => {
@@ -104,8 +94,6 @@ export default {
 			})
 		},
 		...mapActions([
-			'savedSearchHistory',
-			'deleteOneSearchHistory',
 			'deleteAllSearchHistory'
 		])
 	},
@@ -180,6 +168,7 @@ export default {
 		width: 100%;
 		top: 178px;
 		bottom: 0;
+		background: $color-background;
 	}
 }
 </style>

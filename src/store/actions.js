@@ -1,7 +1,7 @@
 import {playMode} from "common/js/config";
 import * as types from "./mutation-types";
 import {shuffle} from "common/js/until";
-import { savedSearch, deleteOneSearch } from "common/js/catch";
+import { savedSearch, deleteOneSearch, savedPlaySpoor } from "common/js/catch";
 export const selectPlay = function( {commit, state}, {songs, index}) {
 	if(state.mode==playMode.random) {
 		commit(types.SET_MODE, playMode.random);
@@ -45,7 +45,6 @@ export const insertPlay=function({commit, state}, song) {
 		
 		currentIndex+=1;	
 	}
-	console.log(currentIndex)
 	songs.splice(currentIndex,0, song)
 	commit(types.SET_FULLSCREEN, true);
 	commit(types.SET_PLAYING, true);
@@ -97,6 +96,9 @@ export const deleteOneSearchHistory= function({commit, state}, query) {
 export const deleteAllSearchHistory= function({commit, state}) {
 	commit(types.SET_SEARCH_HISTORY, [])
 }
+export const savedPlayHistory = function({commit},song) {
+	commit(types.SET_PLAY_HISTORY,savedPlaySpoor(song))
+};
 function find(list, song) {
 	return list.findIndex((item)=>{
 			return item.id==song.id

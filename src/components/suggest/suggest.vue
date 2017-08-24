@@ -49,10 +49,17 @@ data() {
 },
 watch: {
 	query(newVal, oldVal) {
+		//console.log('watch')
 		if(newVal) {
 			this._searchFor(newVal, this.zhida)
 		}
 	}
+},
+created() {
+	//console.log('created')
+	this.$nextTick(()=> {
+		this._searchFor(this.query, this.zhida)
+	})
 },
 methods: {
 	getDisplayName(item) {
@@ -108,7 +115,7 @@ methods: {
 		this.page=1;
 		this.hasMore=true;
 		this.$refs.suggest.scrollTo(0,0,0)
-		//console.log(this.query, this.page, zhida)
+		//console.log(query)
 		searchFor(query, this.page, zhida).then(res => {
 			if(res.code===ERR_OK) {
 				this.searchResult=this._getResult(res.data)

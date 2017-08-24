@@ -1,6 +1,8 @@
 import storage from "good-storage";
 const SEARCH_KEY='__search__';
 const SEARCH_LENGTH=15;
+const PLAY_KEY='__paly__';
+const PLAY_HEIGHT=200;
 function insertArray(arr, item, compare, maxLen) {
 	let index=arr.findIndex(compare)
 	if(index !== -1) {
@@ -38,4 +40,16 @@ export function deleteOneSearch(query) {
 		})
 	storage.set(SEARCH_KEY, ret_arr);
 	return ret_arr;
+}
+export function savedPlaySpoor(song) {
+	let arr=storage.get(PLAY_KEY,[])
+	let ret=insertArray(arr, song, (item) => {
+		return item.id===song.id
+	}, PLAY_HEIGHT)
+	storage.set(PLAY_KEY, ret)
+	return ret;
+}
+export function loadPlaySpoor() {
+	let ret=storage.get(PLAY_KEY, [])
+	return ret
 }

@@ -35,6 +35,10 @@ props: {
 	beforeScroll: {
 		type: Boolean,
 		default: false
+	},
+	scrollToTop: {
+		type: Boolean,
+		default: false
 	}
 	
 },
@@ -94,6 +98,9 @@ watch: {
 	data() {
 		this.$nextTick(() => {
 			this.refresh();
+			if(this.scrollToTop) {
+				this.scrollTo(0,0,0)
+			}
 		})
 	}
 }

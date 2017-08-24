@@ -2,7 +2,7 @@ import {getLyric} from "api/song";
 import {ERR_OK} from "api/config";
 import {Base64} from "js-base64";
 
-export default class Song {
+export class Song {
 	constructor({id, mid, name, album, singer, url, image, duration}) {
 		this.id=id;
 		this.mid=mid;
@@ -25,15 +25,6 @@ export default class Song {
 		}).catch(err => {
 			return Promise.reject(err)
 		})
-		/*return new Promise((resolve, reject) => {
-			getLyric(this.mid).then(res => {
-				this.lyric=res.lyric;
-				resolve(Base64.decode(this.lyric))
-			}).catch(err => {
-				reject(err)
-			})
-		});*/
-		
 	}
 }
 export function CreateSong(musicData) {

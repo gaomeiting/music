@@ -1,5 +1,6 @@
 <template>
 <transition name="list-fade">
+<div>
 <div class="playlist" v-show="flag">
 	<div class="list-wrapper" @click.stop>
 		<div class="list-header">
@@ -24,7 +25,7 @@
 			</transition-group>
 		</scroll>
 		<div class="list-operate">
-			<div class="add">
+			<div class="add" @click.stop="showAddSong">
 				<i class="icon-add"></i>
 				<span class="text">添加歌曲到队列</span>
 			</div>
@@ -35,12 +36,15 @@
 	</div>
 	<confirm ref="confirm" text="是否清空播放列表" confirmBtnText="清空" @confirm="confirmClear"></confirm>
 </div>
+<add-song ref="addSong"></add-song>
+</div>
 </transition>
 </template>
 
 <script type="text/ecmascript-6">
 import Scroll from "base/scroll/scroll";
 import Confirm from "base/confirm/confirm";
+import AddSong from "components/add-song/add-song";
 import { mapGetters, mapActions } from "vuex";
 import { playerMixin } from "common/js/mixin";
 import {playMode} from 'common/js/config';
@@ -107,6 +111,10 @@ methods: {
 		this.toggleMode();
 		this.scrollToElement();
 	},
+	showAddSong() {
+		this.$refs.addSong.show()
+		this.hide()
+	},
 	...mapActions([
 		'deleteOneSong',
 		'deleteAllSongs'
@@ -114,7 +122,8 @@ methods: {
 },
 components: {
 	Scroll,
-	Confirm
+	Confirm,
+	AddSong
 }
 }
 </script>
