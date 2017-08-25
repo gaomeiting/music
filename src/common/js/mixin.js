@@ -8,17 +8,14 @@ export const playlistMixin= {
 		])
 	},
 	mounted() {
-		//console.log("mounted")
 		this.handlePlayList(this.playList);
 	},
 	activated() {
-		//console.log("activated")
 		this.handlePlayList(this.playList);
 	},
 	
 	watch: {
 		playList(newVal) {
-			//console.log("watch")
 			this.handlePlayList(newVal);
 		}
 	},
@@ -104,6 +101,45 @@ export const searchMixin = {
 		...mapActions([
 			'deleteOneSearchHistory',
 			'savedSearchHistory'
+		])
+	}
+};
+export const favoriteMixin = {
+	computed: {
+		...mapGetters([
+			'favoriteList'
+		])
+	},
+	methods: {
+		hasFavorite(song) {
+			//console.log(this.isFavorite(song))
+			let isFavorite=this.isFavorite(song);
+			if(isFavorite) {
+				return  'icon iconfont icon-xiai icon-favorite'
+			}
+			else {
+				return  'icon iconfont icon-xiai'
+			}
+		},
+		toggleFavorite(song) {
+			let isFavorite=this.isFavorite(song);
+			if(isFavorite) {
+				this.deleteFavorite(song)
+			}
+			else {
+				this.savedFavorite(song)
+			}
+		},
+		isFavorite(song) {
+			let favoriteList= this.favoriteList;
+			let index=favoriteList.findIndex((item)=> {
+				return item.id===song.id
+			})
+			return index !==-1
+		},
+		...mapActions([
+			'savedFavorite',
+			'deleteFavorite'
 		])
 	}
 };

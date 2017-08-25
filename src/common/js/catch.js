@@ -3,6 +3,8 @@ const SEARCH_KEY='__search__';
 const SEARCH_LENGTH=15;
 const PLAY_KEY='__paly__';
 const PLAY_HEIGHT=200;
+const FAVORITE_KEY="__favorite__"
+const FAVORITE_LENGTH=200
 function insertArray(arr, item, compare, maxLen) {
 	let index=arr.findIndex(compare)
 	if(index !== -1) {
@@ -52,4 +54,23 @@ export function savedPlaySpoor(song) {
 export function loadPlaySpoor() {
 	let ret=storage.get(PLAY_KEY, [])
 	return ret
+}
+export function savedFavoriteList(song) {
+	let arr=storage.get(FAVORITE_KEY, [])
+	let ret=insertArray(arr, song, (item) => {
+			return song.id===item.id
+		}, FAVORITE_LENGTH)
+	storage.set(FAVORITE_KEY, ret)
+	return ret;
+}
+export function deleteFavoriteList(song) {
+	let arr=storage.get(FAVORITE_KEY, [])
+	let ret=deleteArray(arr, song, (item)=> {
+		return item.id===song.id
+	})
+	storage.set(FAVORITE_KEY, ret)
+	return ret
+}
+export function loadFavoriteList(song) {
+	return storage.get(FAVORITE_KEY, [])
 }

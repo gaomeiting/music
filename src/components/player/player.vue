@@ -59,8 +59,8 @@
 				<div class="icon i-right" :class="disableCls" @click.stop.prevent="next">
 					<i class="icon-next iconfont icon-kuaijin"></i>
 				</div>
-				<div class="icon i-right">
-					<i class="icon iconfont icon-xiai"></i>
+				<div class="icon i-right" @click.stop="toggleFavorite(currentSong)">
+					<i :class="hasFavorite(currentSong)"></i>
 				</div>
 			</div>
  		</div>
@@ -100,11 +100,11 @@ import ProgressBar from 'base/progress-bar/progress-bar';
 import ProgressCircle from 'base/progress-circle/progress-circle';
 import animations from 'create-keyframe-animation';
 import Lyric from 'lyric-parser';
-import { playerMixin } from "common/js/mixin";
+import { playerMixin, favoriteMixin } from "common/js/mixin";
 const transform = prefixStyle('transform')
 const transitionDuration = prefixStyle('transitionDuration')
 export default {
-	mixins: [playerMixin],
+	mixins: [playerMixin, favoriteMixin],
 	data() {
 		return {
 			songReady: false,

@@ -1,7 +1,7 @@
 <template>
-<transition name="list-fade">
 <div>
-<div class="playlist" v-show="flag">
+<transition name="list-fade">
+<div class="playlist" v-if="flag">
 	<div class="list-wrapper" @click.stop>
 		<div class="list-header">
 			<h1 class="title">
@@ -15,8 +15,8 @@
 				<li class="item" :key="item.id" v-for="(item, index) in playList" ref="songItem" @click.stop="currentSongChange(item)">
 					  <i class="iconfont current" :class="{ 'icon-bofang' : currentSong.id===item.id }"></i>
 					  <span class="text">{{item.name}}</span>
-					  <span class="like">
-						<i class="iconfont icon-xiai"></i>
+					  <span class="like" @click.stop="toggleFavorite(item)">
+						<i :class="hasFavorite(item)"></i>
 					  </span>
 					  <span class="delete" @click.stop="deleteSong(item)">
 						<i class="iconfont icon-tianjia icon-delete"></i>
@@ -36,9 +36,10 @@
 	</div>
 	<confirm ref="confirm" text="是否清空播放列表" confirmBtnText="清空" @confirm="confirmClear"></confirm>
 </div>
+</transition>
 <add-song ref="addSong"></add-song>
 </div>
-</transition>
+
 </template>
 
 <script type="text/ecmascript-6">
@@ -46,10 +47,10 @@ import Scroll from "base/scroll/scroll";
 import Confirm from "base/confirm/confirm";
 import AddSong from "components/add-song/add-song";
 import { mapGetters, mapActions } from "vuex";
-import { playerMixin } from "common/js/mixin";
+import { playerMixin, favoriteMixin } from "common/js/mixin";
 import {playMode} from 'common/js/config';
 export default {
-mixins: [playerMixin],
+mixins: [playerMixin, favoriteMixin],
 
 data() {
 	return {
@@ -86,8 +87,6 @@ methods: {
 		})
 		this.$nextTick(()=> {
 			this.$refs.listContent.scrollToElement(this.$refs.songItem[index],0)
-			//console.log(this.currentSong.name, index)
-			//console.log(this.$refs.songItem[index])
 		})
 		
 	},
@@ -133,13 +132,13 @@ components: {
 @import "~common/scss/mixin";
 
 .playlist {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 200;
-    background-color: $color-background-d;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 200;
+	background-color: $color-background-d;
 	&.list-fade-enter-active, &.list-fade-leave-active {
 		transition: opacity 0.3s;
 		.list-wrapper {
