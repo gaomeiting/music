@@ -22,6 +22,9 @@
 				<song-list :songs="playHistory" @selectSong="selectSong"></song-list>
 			</div>
 		</scroll>
+		<div class="no-result-wrapper">
+			<no-result v-if="!noResult.len" :title="noResult.title"></no-result>
+		</div>
 	</div>
 </div>
 </transition>
@@ -31,6 +34,7 @@
 import Switches from "base/switches/switches";
 import Scroll from "base/scroll/scroll";
 import SongList from "base/song-list/song-list";
+import NoResult from "base/no-result/no-result";
 import {Song} from "common/js/song";
 import {playlistMixin} from "common/js/mixin"
 import {mapGetters, mapActions} from "vuex";
@@ -46,6 +50,18 @@ data() {
 	}
 },
 computed: {
+	noResult() {
+		let obj={}
+		if(!this.currentIndex) {
+			obj.len=this.favoriteList.length
+			obj.title="您还没有收藏过音乐~~"
+		}
+		else{
+			obj.len=this.playHistory.length
+			obj.title="您还没有听过音乐~~"
+		}
+		return obj;
+	},
 	...mapGetters([
 		'favoriteList',
 		'playHistory'
@@ -63,7 +79,7 @@ methods: {
 	},
 	setRandomPlay() {
 		let songs=this.currentIndex===1 ? this._changeSong(this.playHistory) : this._changeSong(this.favoriteList)
-		//console.log(arr.slice())
+		if(!songs.length) return;
 		this.randomPlay({songs})
 	},
 	_changeSong(arr) {
@@ -85,7 +101,8 @@ methods: {
 components: {
 	Switches,
 	Scroll,
-	SongList
+	SongList,
+	NoResult
 }
 }
 </script>

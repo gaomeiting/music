@@ -26,3 +26,26 @@
   }
     
 }
+//一像素边框
+@mixin border-1px($color) {
+  position: relative;
+  &:after {
+    display: block;
+    content: "\20";
+    width: 100%;
+    border-top: 1px solid $color;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    @media (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5) {
+            -webkit-transform: scaleY(0.7);
+            transform: scaleY(0.7);
+    }
+    @media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2) {
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+    }
+
+  }
+
+}

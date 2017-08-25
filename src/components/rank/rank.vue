@@ -80,7 +80,7 @@ import {playlistMixin} from "common/js/mixin";
 .rank {
 	position: fixed;
 	width: 100%;
-	top: 88px;
+	top: 44px;
 	bottom: 0;
 	.toplist {
 		height: 100%;

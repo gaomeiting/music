@@ -145,7 +145,9 @@ const ANCHOR_HEIGHT = 18;
 		          return
 		        }
 		        this.fixedTop = fixedTop
-		        this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
+		        if(this.$refs.fixed) {
+		        	this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
+		        }
 		}
   	},
   	

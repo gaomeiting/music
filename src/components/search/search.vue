@@ -116,7 +116,7 @@ export default {
 	}
 	.shortcut-wrapper {
 		position: fixed;
-		top: 178px;
+		top: 124px;
 		bottom: 0;
 		width: 100%;
 		.shortcut {
@@ -166,7 +166,7 @@ export default {
 	.search-result {
 		position: fixed;
 		width: 100%;
-		top: 178px;
+		top: 124px;
 		bottom: 0;
 		background: $color-background;
 	}

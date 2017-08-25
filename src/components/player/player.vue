@@ -86,7 +86,7 @@
  	</div>
  </transition>
  <play-list ref="playList" :playList="playList" @currentSongChange="currentSongChange"></play-list>
- <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
+ <audio :src="currentSong.url" ref="audio" @play="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
  </div>
 </template>
 
@@ -149,13 +149,14 @@ export default {
 			if(this.lyric) {
 				this.lyric.stop()
 			}
-			this.$nextTick(() => {
+			clearTimeout(this.timer)
+			this.timer=setTimeout(() => {
 				const audio=this.$refs.audio;
 				audio.play()
 				this.setPlaying(true)
 				this.getLyric(newSong)
 				this.savedPlayHistory(newSong)
-			})
+			},1000)
 			
 		},
 		playing(newPlaying) {

@@ -103,7 +103,7 @@ const HOT_NAME_LEN=10
 <style scoped lang="scss" rel="stylesheet/scss">
 .singer {
 	position: fixed;
-    	top: 88px;
+    	top: 44px;
     	bottom: 0;
     	width: 100%;
 }

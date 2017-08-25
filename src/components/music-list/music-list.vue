@@ -68,9 +68,7 @@ mounted() {
 },
 
 methods : {
-	randomPlayy(item) {
-		console.log(item)
-	},
+	
 	selectSong(song, index) {
 		let songs = this.songs;
 		this.selectPlay({songs, index})

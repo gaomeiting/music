@@ -1,7 +1,7 @@
 <template>
 <div class="m-header">
-	<div class="icon"></div>
-	<h1 class="text">叮当 Music</h1>
+	<!-- <div class="icon"></div> -->
+	<!-- <h1 class="text">Music</h1> -->
 	<router-link tag="div" class="mine" to="/user">
 		<i class="iconfont icon-geshou icon-mine"></i>
 	</router-link>
@@ -20,7 +20,8 @@
       position: relative;
       height: 44px;
       text-align: center;
-      color: $color-theme;
+      color: $color-text-ll;
+      background-color: #393a3f;
       font-size: 0;
       .icon { 
           display: inline-block;
