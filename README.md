@@ -1,21 +1,50 @@
-# vue-music
+# 音乐播放器
 
-> A Vue.js project
+### 项目描述
+> * 播放器内核页
+> * 推荐页
+> * 歌单详情页
+> * 歌手页
+> * 歌手详情页
+> * 排行页
+> * 搜索页
+> * 添加歌曲页
+> * 个人中心页
 
-## Build Setup
+### 实现技术 Vue + vue-router + vuex + Scss + ES6 + vue-lazyload + better-scroll
 
-``` bash
-# install dependencies
-npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+### 技术要求
 
-# build for production with minification
-npm run build
+>* 轮播图组件，使用第三方库 better-scroll 辅助实现
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
+>* 更好的用户体验，当数据未请求到时，显示 loading 组件，没有更多时处理，数据空时处理
+>* 下拉图片放大、跟随推动、渐进增强的高斯模糊效果 backdrop-filter
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+>* 列表图片使用懒加载技术 vue-lazyload，优化页面加载速度
+>* 左右联动右侧是一个字母列表，与左侧歌手列表联动，滚动固定标题实现
+>* 用 vuex 管理各种播放时状态，播放、暂停等功能调用 audio API
+
+>* 播放器可以最大化和最小化切换
+
+>* 中部唱片动画使用第三方 JS 动画库 create-keyframe-animation 实现
+
+>* 底部操作区图标使用 iconfonts。
+
+>* 横向进度条组件, 圆形进度条组件
+
+>*  歌词的解析先将歌词 jsonp 格式转换为 json 格式，再使用第三方库 js-base64 进行 Base64 解码操作，最后再使用第三方库 lyric-parser对歌词进行格式化
+>*  侧滑显示歌词、歌词跟随进度条高亮等交互效果
+
+>* 搜索时考虑到数据量大且频繁的问题，对请求做了分页和节流处理
+
+>* 移动端键盘占屏的问题，对滚动前的 input 做了 blur() 操作
+
+>* 对搜索历史进行 localstorage 缓存，清空搜索历史时使用了改装过的 confirm 组件
+
+>*  支持将搜索的歌曲添加到播放列表
+>* 将 localstorage 中 “我的收藏” 和 “最近播放” 数据展示
+>* 页面响应式，适配常见的移动端屏幕，采用 flex 布局
+
+### 项目展示
+
